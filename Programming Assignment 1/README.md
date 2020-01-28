@@ -5,8 +5,7 @@
 This assignment will go over how to compile and install modern Linux kernel, as well as custom system calls.
 
 ### The C code included in this file will test both Helloworld and cs3753 system calls 
-cs3753_add will add 1 and 10 together in kernel mode and return the result in the user space.
-helloworld will print helloworld
+
 ```
 syscallTest.c
 ```
@@ -27,4 +26,4 @@ includes/linux/syscalls.h
 ```
 dmesg
 ```
-(this file can be tailed using `dmesg >> log.txt`)
+(this file can be obtained by using `dmesg >> log.txt`)
