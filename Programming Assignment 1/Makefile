@@ -136,6 +136,7 @@ obj-$(CONFIG_X86_INTEL_UMIP)		+= umip.o
 obj-$(CONFIG_UNWINDER_ORC)		+= unwind_orc.o
 obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
 obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+# this is where helloworld.o and cs3753.o object files are added
 obj-y                                   +=helloworld.o
 obj-y                                   +=cs3753_add.o
 

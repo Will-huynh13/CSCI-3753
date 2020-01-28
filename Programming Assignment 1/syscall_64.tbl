@@ -339,6 +339,7 @@
 330	common	pkey_alloc		sys_pkey_alloc
 331	common	pkey_free		sys_pkey_free
 332	common	statx			sys_statx
+# this is where the syscall is defined, 333 for helloworld and 334 for cs3753
 333	64	helloworld		sys_helloworld
 334	64	cs3753_add		sys_cs3753_add
 
