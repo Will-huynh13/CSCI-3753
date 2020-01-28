@@ -11,7 +11,7 @@ syscallTest.c
 ```
 How to compile: gcc syscallTest.c -o test
 
-### Kernel Files that were changed
+### Kernel Files and their appropriate paths:
 
 kernel files are in the appropriate paths listed below: 
 ```
