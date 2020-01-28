@@ -4,7 +4,7 @@
 
 This assignment will go over how to compile and install modern Linux kernel, as well as custom system calls.
 
-### The C code included in this file will test both Helloworld and cs3753 system calls 
+### The C code included in this file will test both Helloworld and cs3753_add system calls 
 
 ```
 syscallTest.c
