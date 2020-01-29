@@ -1,6 +1,7 @@
 # Programmming Assignment 1
 
-### Name: WIll Huynh, Email: wihu4176@coloroado.edu
+### Name: WIll Huynh<br/>
+### Email: wihu4176@coloroado.edu
 
 This assignment will go over how to compile and install modern Linux kernel, as well as custom system calls.
 
