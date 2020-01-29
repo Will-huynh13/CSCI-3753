@@ -26,5 +26,5 @@ includes/linux/syscalls.h
 ```
 dmesg or tail /var/log/syslog
 ```
-(dmesg can be obtained by using `dmesg >> log.txt`)<br /br>
+(dmesg can be obtained by using `dmesg >> log.txt`)<br/>
 (tail file can be obtained by using `tail /var/log/syslog >> log.txt`)
