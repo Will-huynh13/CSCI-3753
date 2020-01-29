@@ -1,6 +1,6 @@
 # Programmming Assignment 1
 
-### Name: WIll Huynh, wihu4176@coloroado.edu
+### Name: WIll Huynh, Email: wihu4176@coloroado.edu
 
 This assignment will go over how to compile and install modern Linux kernel, as well as custom system calls.
 
@@ -26,5 +26,5 @@ includes/linux/syscalls.h
 ```
 dmesg or tail /var/log/syslog
 ```
-(dmesg can be obtained by using `dmesg >> log.txt`)
+(dmesg can be obtained by using `dmesg >> log.txt`)<br /br>
 (tail file can be obtained by using `tail /var/log/syslog >> log.txt`)
