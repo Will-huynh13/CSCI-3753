@@ -5,7 +5,7 @@
 
 This assignment will go over Linux Kernel Modules (LKM) and Linux character device drivers.
 
-### The C code included in this file will test both HelloModule and PA2_char_driver
+### The C code included in this file will test pa2_char_driver
 
 ```
 CharDriver.c
