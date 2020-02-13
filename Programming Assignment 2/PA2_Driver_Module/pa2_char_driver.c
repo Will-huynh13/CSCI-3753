@@ -5,7 +5,7 @@
 #include<linux/uaccess.h> // enables me to access data from user-space in the kernel
 
 #define BUFFER_SIZE 1024
-#define MAJOR_NUMBER 247 // this is the specific major number for the device driver
+#define MAJOR_NUMBER 270 // this is the specific major number for the device driver
 #define DEVICE_NAME "pa2_char_driver" // this is the name of the device driver
 
 
@@ -185,7 +185,7 @@ static void pa2_char_driver_exit(void)
 	/* print to the log file that the exit function is called.*/
 	/* unregister  the device using the register_chrdev() function. */
 
-	printk(KERN_ALERT "We are now inside %s, function\n",__FUNCTION__); // shows that this function is active
+	printk(KERN_ALERT "We are now inside %s function\n",__FUNCTION__); // shows that this function is active
 	if(device_buffer != NULL) // checks if device_buffer still active
 	{
 	   kfree(device_buffer); //frees a block of memory previously allocated with kmalloc()
