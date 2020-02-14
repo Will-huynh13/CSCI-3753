@@ -1,13 +1,21 @@
+#include <unistd.h>
 #include <stdio.h> // this enable the usage of scanf()
-#include <stdlib.h>		
+#include <stdlib.h>
+#include <malloc.h>
+#include <sys/stat.h>		
 #include <fcntl.h> // this enable the usage of open() and close()
+#include <string.h>
 #define BUFFER_SIZE 1024
 
 int main()
 {
 	char choice;
-	char buffer[BUFFER_SIZE];
-	int openFile = open("/dev/pa2_character_device",O_RDWR); // the usage of O_RDWR
+	int openFile = open("/dev/pa2_character_device",O_RDWR | O_APPEND); // the usage of O_RDWR
+	int whence;
+	int NewOffset;
+	char *buffer;
+	int writeSize = 0;
+	int length = 0;
 
 	while(1) // this will infinitly loop
 	{
@@ -32,14 +40,26 @@ int main()
 			case 'r':
 				printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 				printf("Enter the number of bytes you want to read:\n");
-				//scanf();
+				scanf("%d",&length);
+				buffer = (char *)malloc(BUFFER_SIZE * sizeof(char));
+				read(openFile,buffer,length);
+				printf("Data from the device: %s\n",buffer);
 				printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+				while (getchar() != '\n');
+				free(buffer);
 				break;
 			case 'w':
+			
 				printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 				printf("Enter data you want to write to the device\n");
-				//scanf();
+				//scanf("%[^\n]",buffer);
+				fgets(buffer,BUFFER_SIZE, stdin);
+				buffer = (char *)malloc(BUFFER_SIZE * sizeof(char));
+				writeSize =  strlen(buffer);
+				write(openFile,buffer,writeSize);
 				printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+				while (getchar() != '\n');
+				free(buffer);
 				break;
 			case 's':
 				printf("~~~~~~~~~~~~~~~~~~~~~~~~~\n");
@@ -48,6 +68,8 @@ int main()
 				printf("Enter a value for whence:\n");
 				//scanf();
 				printf("~~~~~~~~~~~~~~~~~~~~~~~~\n");
+				while (getchar() != '\n');
+
 				break;
 			case 'e':
 				printf("~~~~~~~~~\n");
@@ -60,4 +82,5 @@ int main()
 		}
 	}
 }
+
     

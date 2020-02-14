@@ -6,7 +6,7 @@
 
 #define BUFFER_SIZE 1024
 #define MAJOR_NUMBER 270 // this is the specific major number for the device driver
-#define DEVICE_NAME "pa2_char_driver" // this is the name of the device driver
+#define DEVICE_NAME "pa2_character_device" // this is the name of the device driver
 
 
 MODULE_AUTHOR("Will Huynh"); //this is gives the module an author
@@ -100,9 +100,9 @@ int pa2_char_driver_open (struct inode *pinode, struct file *pfile) //inode repr
 int pa2_char_driver_close (struct inode *pinode, struct file *pfile)
 {
 	/* print to the log file that the device is closed and also print the number of times this device has been closed until now*/
-	printk("The Device is closed \n");
+	printk(KERN_ALERT "The Device is closed \n");
 	num_close++; //keeps track of number of time its been closed
-	printk("The Device has been closed this many times %d \n",num_close);
+	printk(KERN_ALERT "The Device has been closed this many times %d \n",num_close);
 	return 0;
 }
 
@@ -190,11 +190,7 @@ static void pa2_char_driver_exit(void)
 	{
 	   kfree(device_buffer); //frees a block of memory previously allocated with kmalloc()
 	}
-	else
-	{
-	   printk("kfree did not work properly");
-	}
-	
+
 	unregister_chrdev(MAJOR_NUMBER,DEVICE_NAME); // this unregisters the character device driver this functions takes the major # and device name	
 }
 
