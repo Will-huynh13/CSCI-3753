@@ -16,25 +16,26 @@ int main(){
 	char *buffer;
     
 	int file = open(DEVICENAME, O_RDWR  | O_APPEND);
-	bool running = true;
-	while(running){
+	bool runfile = true;
+	printf("Welcome to pa2_character_device\n");
+	while(runfile){
 		printf("COMMANDS:\n");
-		printf("	'r' to read from device\n");
-		printf("	'w' to write to device\n");
-		printf("	's' to seek from device\n");
-		printf("	'e' to exit from device\n");
-		printf("	anything else brings up main menu\n");
-		printf("/pa2_character_device/command$> ");
+		printf("Press 'r' to read from device\n");
+		printf("Press 'w' to write to device\n");
+		printf("Press 's' to seek from device\n");
+		printf("Press 'e' to exit from device\n");
+		printf("Press anything else brings up main menu\n");
 		scanf("%c", &command);
 
-		switch(command){
+		switch(command)
+		{
 			case 'r':
 				buffer = (char *)malloc(Buffer_size * sizeof(char));
 				printf("/pa2_character_device/read$> How many bytes to read?: ");
 				scanf("%d", &length);
 				read(file, buffer, length);
-				printf("/pa2_character_device/read$> %s\n", buffer); // print that buffer
-				while(getchar() != '\n'); // check for end line
+				printf("/pa2_character_device/read$> %s\n", buffer); // printing the buffer
+				while(getchar() != '\n');
 				free(buffer);
 				break;
 			case 'w':
@@ -42,8 +43,8 @@ int main(){
 				printf("/pa2_character_device/write$> ");
 				scanf("%s", buffer);
 				writeSize = strlen(buffer);
-				write(file, buffer,writeSize); // write the buffer to file
-				while (getchar() != '\n'); // check for end line
+				write(file, buffer,writeSize); // wwriting to the buffer
+				while (getchar() != '\n'); 
 				free(buffer);
 				break;
 			case 's':
@@ -52,12 +53,10 @@ int main(){
 					scanf("%d", &whence);
 					printf("\n/pa2_character_device/write$> Enter an offset value: ");
 					scanf("%d", &new_offset);
-					while (getchar() != '\n');
 				switch(whence)
 				{
 					case 0: 
 						lseek(file, new_offset, whence);
-						printf("i am in SEEK_SET\n");
 						break;
 					case 1:
 						lseek(file, new_offset, whence);
@@ -73,8 +72,8 @@ int main(){
 	
 				break;
 			case 'e':
-				printf("/pa2_character_device/exit$> Exiting\n");
-				running = false;
+				printf("Exiting!!!\n");
+				runfile = false;
 				break;
 			default:
 				printf("\n/pa2_character_device/error$> error: not a valid command\n");
