@@ -30,9 +30,9 @@ sudo insmod pa2_char_driver.ko (installs module)
 **use lsmod to list LKMs**
 sudo rmmod pa2_char_driver (removes module)
 ```
-Creating character driver (270 unique major number)
+Creating character driver (241 unique major number)
 ```
-sudo mknod –m 777 /dev/pa2_character_device c 270 0
+sudo mknod –m 777 /dev/pa2_character_device c 241 0
 
 ```
 
