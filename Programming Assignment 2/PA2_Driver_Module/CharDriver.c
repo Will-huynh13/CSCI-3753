@@ -5,82 +5,82 @@
 #include <sys/stat.h>		
 #include <fcntl.h> // this enable the usage of open() and close()
 #include <string.h>
-#define BUFFER_SIZE 1024
+#include <stdbool.h>
 
-int main()
-{
-	char choice;
-	int openFile = open("/dev/pa2_character_device",O_RDWR | O_APPEND); // the usage of O_RDWR
-	int whence;
-	int NewOffset;
+#define DEVICENAME "/dev/pa2_character_device"
+#define Buffer_size 1024
+
+int main(){
+	char command;
+	int length, whence, new_offset, writeSize;
 	char *buffer;
-	int writeSize = 0;
-	int length = 0;
+    
+	int file = open(DEVICENAME, O_RDWR  | O_APPEND);
+	bool running = true;
+	while(running){
+		printf("COMMANDS:\n");
+		printf("	'r' to read from device\n");
+		printf("	'w' to write to device\n");
+		printf("	's' to seek from device\n");
+		printf("	'e' to exit from device\n");
+		printf("	anything else brings up main menu\n");
+		printf("/pa2_character_device/command$> ");
+		scanf("%c", &command);
 
-	while(1) // this will infinitly loop
-	{
-
-		printf("\n");
-		printf("\n");
-		printf("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#\n");
-		printf("#~~~This is the test app for pa2_character_device~~~#\n");
-		printf("#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#\n");
-		printf("Input options:\n");
-		printf("Press r to read from device\n");
-		printf("Press w to write to the device\n");
-		printf("Press s to seek into device\n");
-		printf("Press e to exit from the device\n");
-		printf("Press anything else to keep reading or writing from the device\n");
-		printf("Enter command:\n");
-
-		scanf("%c",&choice);
-
-		switch(choice)
-		{
+		switch(command){
 			case 'r':
-				printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-				printf("Enter the number of bytes you want to read:\n");
-				scanf("%d",&length);
-				buffer = (char *)malloc(BUFFER_SIZE * sizeof(char));
-				read(openFile,buffer,length);
-				printf("Data from the device: %s\n",buffer);
-				printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-				while (getchar() != '\n');
+				buffer = (char *)malloc(Buffer_size * sizeof(char));
+				printf("/pa2_character_device/read$> How many bytes to read?: ");
+				scanf("%d", &length);
+				read(file, buffer, length);
+				printf("/pa2_character_device/read$> %s\n", buffer); // print that buffer
+				while(getchar() != '\n'); // check for end line
 				free(buffer);
 				break;
 			case 'w':
-			
-				printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-				printf("Enter data you want to write to the device\n");
-				//scanf("%[^\n]",buffer);
-				fgets(buffer,BUFFER_SIZE, stdin);
-				buffer = (char *)malloc(BUFFER_SIZE * sizeof(char));
-				writeSize =  strlen(buffer);
-				write(openFile,buffer,writeSize);
-				printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-				while (getchar() != '\n');
+				buffer = (char *)malloc(Buffer_size * sizeof(char));
+				printf("/pa2_character_device/write$> ");
+				scanf("%s", buffer);
+				writeSize = strlen(buffer);
+				write(file, buffer,writeSize); // write the buffer to file
+				while (getchar() != '\n'); // check for end line
 				free(buffer);
 				break;
 			case 's':
-				printf("~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-				printf("Enter an offset value:\n");
-				//scanf();
-				printf("Enter a value for whence:\n");
-				//scanf();
-				printf("~~~~~~~~~~~~~~~~~~~~~~~~\n");
-				while (getchar() != '\n');
-
+					new_offset = 0; whence= 0;
+					printf("/pa2_character_device/seek$> Enter whence: ");
+					scanf("%d", &whence);
+					printf("\n/pa2_character_device/write$> Enter an offset value: ");
+					scanf("%d", &new_offset);
+					while (getchar() != '\n');
+				switch(whence)
+				{
+					case 0: 
+						lseek(file, new_offset, whence);
+						printf("i am in SEEK_SET\n");
+						break;
+					case 1:
+						lseek(file, new_offset, whence);
+					
+						break;
+					case 2:
+						lseek(file, new_offset, whence);
+			
+						break;
+					default:
+						printf("Invalid whence, enter again\n");
+				}
+	
 				break;
 			case 'e':
-				printf("~~~~~~~~~\n");
-				printf("Good bye!\n");
-				printf("~~~~~~~~~\n");
-				exit(0);
+				printf("/pa2_character_device/exit$> Exiting\n");
+				running = false;
 				break;
 			default:
-				while (getchar() != '\n');
+				printf("\n/pa2_character_device/error$> error: not a valid command\n");
+				break;
 		}
 	}
+	close(file);
+	return 0;
 }
-
-    

@@ -5,7 +5,7 @@
 #include<linux/uaccess.h> // enables me to access data from user-space in the kernel
 
 #define BUFFER_SIZE 1024
-#define MAJOR_NUMBER 270 // this is the specific major number for the device driver
+#define MAJOR_NUMBER 241 // this is the specific major number for the device driver
 #define DEVICE_NAME "pa2_character_device" // this is the name of the device driver
 
 
@@ -47,9 +47,9 @@ ssize_t pa2_char_driver_read (struct file *pfile, char __user *buffer, size_t le
 
 	// now printing the number of bytes and coping to user
 	bytes_read = bytes_in - copy_to_user(buffer,device_buffer + *offset,bytes_in);
-	printk(KERN_ALERT "The Device read : %d Bytes \n", bytes_read);
 	*offset += bytes_read; // changed the position of the offset
-	return bytes_read;
+	printk(KERN_ALERT "The Device read : %d Bytes, Offset: %d", bytes_read,*offset);
+	return 0;
 }
 
 //this is the write function
@@ -64,8 +64,8 @@ ssize_t pa2_char_driver_write (struct file *pfile, const char __user *buffer, si
 
 	printk(KERN_ALERT "We are now in %s function \n",__FUNCTION__);
 	int max_bytes = BUFFER_SIZE - *offset; // this will calculate the max number of bytes
-	int byte_write;
-	int byte_to_write;
+	int byte_write; // bytes already read
+	int byte_to_write; // bytes to write in
 	if(max_bytes > length) //checks if max bytes is greater than length, if so set to length
 	{
 	   byte_to_write = length;
@@ -74,12 +74,12 @@ ssize_t pa2_char_driver_write (struct file *pfile, const char __user *buffer, si
 	{
 	   byte_to_write = max_bytes;
 	}
-	byte_write = byte_to_write - copy_to_user(device_buffer + *offset, buffer, byte_to_write);
-	printk(KERN_ALERT "The Device wrote : %d Bytes \n", byte_write);
+	byte_write = byte_to_write - copy_from_user(device_buffer + *offset, buffer, byte_to_write);
 	*offset += byte_write;
+	printk(KERN_ALERT "The Device wrote : %d Bytes, Offset: %d", byte_write,*offset);
 	
 
-	return byte_write;
+	return length;
 }
 
 //this is the open function
@@ -127,15 +127,21 @@ loff_t pa2_char_driver_seek (struct file *pfile, loff_t offset, int whence) //in
 	   case 2: // This is SEEK_END, the current position is set to offset bytes before the end of the file (moves the file pointer to the end of file)
 		new_pos = BUFFER_SIZE - offset; // 1024 is the buffer size
 		break;
+		default:
+			printk(KERN_ALERT "Invalid whence\n");
+			return -EINVAL;
 	}
 
 	if(new_pos < 0) // this checks if the user attempts to seek before the beginning of the file
 	{
 	   printk(KERN_ALERT "ERROR: cannot seek prior to buffer start");
+	   new_pos = 0;
 	}
+
 	if(new_pos > BUFFER_SIZE) // this checks if the user is trying to seek beyond end of the file
 	{
 	   printk(KERN_ALERT "ERROR: cannot seek past the buffer end");
+	   new_pos = BUFFER_SIZE;
 	}
 
 	pfile->f_pos = new_pos; // updates pointer
@@ -155,7 +161,7 @@ struct file_operations pa2_char_driver_file_operations = {
 	.open	 = pa2_char_driver_open,
 	.read 	 = pa2_char_driver_read,
 	.write   = pa2_char_driver_write,
-        .release = pa2_char_driver_close, //"close" does not exist, so then we use release
+    .release = pa2_char_driver_close, //"close" does not exist, so then we use release
 	.llseek  = pa2_char_driver_seek   //llseek used
 	/* add the function pointers to point to the corresponding file operations. look at the file fs.h in the linux souce code*/
 };
@@ -186,11 +192,7 @@ static void pa2_char_driver_exit(void)
 	/* unregister  the device using the register_chrdev() function. */
 
 	printk(KERN_ALERT "We are now inside %s function\n",__FUNCTION__); // shows that this function is active
-	if(device_buffer != NULL) // checks if device_buffer still active
-	{
-	   kfree(device_buffer); //frees a block of memory previously allocated with kmalloc()
-	}
-
+	kfree(device_buffer); //frees a block of memory previously allocated with kmalloc()
 	unregister_chrdev(MAJOR_NUMBER,DEVICE_NAME); // this unregisters the character device driver this functions takes the major # and device name	
 }
 
