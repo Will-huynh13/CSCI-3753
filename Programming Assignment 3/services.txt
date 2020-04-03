@@ -1,0 +1,5 @@
+thread: 4921 is servicing input/names1.txt
+thread: 4919 is servicing input/names2.txt
+thread: 4919 is servicing input/names5.txt
+thread: 4921 is servicing input/names3.txt
+thread: 4920 is servicing input/names4.txt
